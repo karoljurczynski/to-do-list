@@ -1,0 +1,145 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Nerko One', cursive;
+    color: #456268;
+    background: #fcf8ec;
+}
+#container {
+    width: 600px;
+    height: 100%;
+    margin: 0 auto;
+}
+h1 {
+    display: inline-block;
+    width: 100%;
+    font-size: 41px;
+    text-align: center;
+    margin: 10px 0;
+}
+#top {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 0 20px 20px;
+    border-bottom: 2px solid black;
+}
+input[type="text"] {
+    outline: none;
+    border: none;
+    background: #d0e8f2;
+    font-family: 'Nerko One';
+    font-size: 25px;
+}
+input[name="textBox"] { 
+    height: 40px;
+    width: 100%;
+    margin-right: 20px;
+    box-shadow: 0px 1px 3px black, -1px 1px 3px black;
+    text-indent: 7px;
+    border-radius: 5px;
+}
+#searchInput {
+    display: none;
+}
+#exitSearchButton {
+    display: none;
+    margin: auto 0;
+}
+img {
+    height: 30px;
+}
+button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.4s ease;
+    box-shadow: 0px 1px 3px black, -1px 1px 3px black;
+    border-radius: 3px;
+    
+}
+button:disabled {
+    opacity: 0.5;
+}
+.MenuButton {
+    height: 42px;
+    width: 42px;
+    margin-right: 10px;
+    background: #79a3b1;
+    border-radius: 5px;
+}
+.MenuButton:last-child {
+    margin-right: 0;
+}
+.MenuButton:hover {
+    background: #456268;
+}
+button:hover {
+    background-color: #79a3b1;
+}
+main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: left;
+    flex-direction: column;
+    padding: 15px;
+    padding: 15px 20px 0;
+}
+.Note {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    font-size: 25px;
+    border-bottom: 2px solid black;
+}
+input[name="editBox"] {
+    padding-left: 7px;
+    background: inherit;
+    width: 100%;
+    height: 40px;
+    margin-right: 5px;
+}
+.NoteContent {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding-left: 7px;
+    width: 100%;
+    height: 40px;
+}
+.NoteButton {
+    height: 26px;
+    width: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #d0e8f2;
+    outline: none;
+    margin-right: 7px;
+}
+.NoteButton img {
+    width: 15px;
+    height: auto;
+}
+.deleteButton {
+    z-index: 2;
+}
+.RedLine {
+    width: 580px;
+    margin: 0 -10px;
+    height: 5px;
+    background-color: red;
+    border-radius: 5px;
+    position: absolute;
+}
+.Edit {
+    display: none;    
+}
