@@ -74,11 +74,15 @@ class Note {
         // DELETING PARENT ELEMENT OF BUTTON (NOTE)
         div.parentElement.remove();
 
+        // DELETING NOTE FROM LOCAL STORAGE
+        localStorage.removeItem(noteArray[note].id);
+
         // DELETING NOTE FROM ARRAY
         noteArray.splice(note, 1);
 
         // ADDING AN ID OF DELETED ELEMENT TO ARRAY FOR REUSE
         oldIds.push(this.id[2]);
+        //localStorage.setItem("oldIds", oldIds);
 
         // DISABLING ADD BUTTON WHEN ARRAY HAS TOO MUCH ELEMENTS
         if(noteArray.length < 10)
@@ -102,6 +106,7 @@ class Note {
         // MAKING A RED LINE
         button.parentElement.appendChild(redLine);
         redLine.className = "RedLine";
+
     }
     editNote() {    // DONE
         // FUNCTIONS
@@ -137,6 +142,10 @@ class Note {
             // CHANGING CONTENT OF NOTE
             note.querySelector("#noteContent"+id).textContent = newContent;
             noteArray[index].content = newContent;
+            
+            // CHANGING CONTENT OF NOTE IN LOCAL STORAGE
+            console.log(id);
+            localStorage.setItem(id, JSON.stringify(noteArray[index]));
 
             // MAKING EDIT BOX INVISIBLE AND NOTE VISIBLE
             changeDisplay("flex", "none");
@@ -166,7 +175,7 @@ const createNote = () => {  // DONE
             document.querySelector("#newNote").placeholder = "Write your note: ";
             
             // USING NEW ID WHEN ARRAY IS EMPTY
-            if(oldIds.length == 0)
+            if(oldIds.length === 0) 
                 newNote = new Note(noteArray.length, content.value); 
 
             // REUSING OLD IDS OF DELETED NOTES
@@ -177,6 +186,9 @@ const createNote = () => {  // DONE
 
             // ADDING NOTE TO ARRAY
             noteArray.push(newNote);
+            
+            // ADDING NOTE TO LOCAL STORAGE
+            localStorage.setItem(newNote.id, JSON.stringify(newNote));
 
             // DELETING VALUE OF INPUT
             content.value = "";
@@ -188,7 +200,6 @@ const createNote = () => {  // DONE
             noteArray.length < 10 ? document.querySelector("#addButton").disabled = false : document.querySelector("#addButton").disabled = true;
         } 
     } 
-
     // DISABLING ADD BUTTON WHEN ARRAY HAS TOO MUCH ELEMENTS
     else
         document.querySelector("#addButton").disabled = true;
@@ -221,7 +232,6 @@ const searchNote = () => {  // DONE
         // FILTER FOR NOTES IN ARRAY
         for(i = 0; i < noteArray.length; i++) {
             if (noteArray[i].content.includes(text)) {
-                console.log(noteArray[i].content);
                 if (container.querySelector(`#note${noteArray[i].id}`) != null)
                     container.querySelector(`#note${noteArray[i].id}`).style.display = "flex";
             }     
@@ -255,10 +265,24 @@ const findId = (array, id) => {
             return i;
     }
 }
+const checkLocalStorage = () => {
+  let item;
+  if (localStorage.length > 0) {
+    const keys = Object.keys(localStorage);
+    keys.sort();
+    keys.forEach((el) => {
+      item = JSON.parse(localStorage.getItem(el));
+      noteArray.push(new Note(item.id, item.content));
+    });
+    noteArray.forEach((el) => {
+      el.showNote();
+    })
+  }
+}
 
 // VARIABLES
 const noteArray = [];
-const oldIds = [];
+let oldIds = [];
 
 // CREATING NOTE EVENT
 document.querySelector("#addButton").addEventListener("click", createNote);
@@ -266,3 +290,4 @@ document.querySelector("#newNote").addEventListener("keyup", (e) => {e.keyCode =
 
 // SEARCHING FOR NOTE EVENT
 document.querySelector("#searchButton").addEventListener("click", searchNote);
+checkLocalStorage();
