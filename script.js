@@ -1,10 +1,15 @@
+/* 	TO DO
+		- disabled notes don't save in local storage
+		
+*/
+
 // CLASSES
 class Note {
     constructor(id, content) {
         this.id = id;
         this.content = content;
     }
-    showNote() {    // DONE
+    showNote() {
         // VARIABLES
         const container = document.querySelector("main");
 
@@ -66,7 +71,7 @@ class Note {
         document.querySelector("#dn"+this.id).addEventListener("click", this.disableNote);
         document.querySelector("#ed"+this.id).addEventListener("click", this.editNote);
     }
-    deleteNote() {  // DONE
+    deleteNote() {
         // VARIABLES
         const div = document.querySelector("#"+this.id);
         const note = findId(noteArray, this.id[2]);
@@ -82,13 +87,13 @@ class Note {
 
         // ADDING AN ID OF DELETED ELEMENT TO ARRAY FOR REUSE
         oldIds.push(this.id[2]);
-        //localStorage.setItem("oldIds", oldIds);
+        localStorage.setItem("oldIds", JSON.stringify(oldIds));
 
         // DISABLING ADD BUTTON WHEN ARRAY HAS TOO MUCH ELEMENTS
         if(noteArray.length < 10)
             document.querySelector("#addButton").disabled = false;
     }
-    disableNote() { // DONE
+    disableNote() {
         // VARIABLES
         const button = document.querySelector("#"+this.id);
         const buttons = button.parentElement.querySelectorAll("button");
@@ -108,7 +113,7 @@ class Note {
         redLine.className = "RedLine";
 
     }
-    editNote() {    // DONE
+    editNote() {
         // FUNCTIONS
         const changeDisplay = (from, to) => {
             let i;
@@ -160,14 +165,13 @@ class Note {
 }
 
 // FUNCTIONS
-const createNote = () => {  // DONE
+const createNote = () => {
     // CHECKING NUMBER OF NOTES
     if (noteArray.length < 10) {
         document.querySelector("#addButton").disabled = false;
         // VARIABLES
         const content = document.querySelector("#newNote");
-        let newNote;
-
+				let newNote;
         // CHECKING IF VALUE OF INPUT IS EMPTY
         if(content.value === "")
             document.querySelector("#newNote").placeholder = "Input is empty!";
@@ -176,12 +180,13 @@ const createNote = () => {  // DONE
             
             // USING NEW ID WHEN ARRAY IS EMPTY
             if(oldIds.length === 0) 
-                newNote = new Note(noteArray.length, content.value); 
+              newNote = new Note(noteArray.length, content.value); 
 
             // REUSING OLD IDS OF DELETED NOTES
             else {
-                newNote = new Note(oldIds[oldIds.length-1], content.value);
-                oldIds.pop();
+							newNote = new Note(oldIds[oldIds.length-1], content.value);
+							oldIds.pop();
+							localStorage.setItem("oldIds", JSON.stringify(oldIds));
             }
 
             // ADDING NOTE TO ARRAY
@@ -204,7 +209,7 @@ const createNote = () => {  // DONE
     else
         document.querySelector("#addButton").disabled = true;
 }
-const searchNote = () => {  // DONE
+const searchNote = () => {
     // FUNCTIONS
     const changeDisplay = (from, to) => {
         let i;
@@ -266,18 +271,20 @@ const findId = (array, id) => {
     }
 }
 const checkLocalStorage = () => {
-  let item;
-  if (localStorage.length > 0) {
-    const keys = Object.keys(localStorage);
-    keys.sort();
+	let item;
+	if (!localStorage.getItem("oldIds")) {
+		localStorage.setItem("oldIds", JSON.stringify(oldIds));
+	}
+	oldIds = JSON.parse(localStorage.getItem("oldIds"));
+  if (localStorage.length != 0) {
+		const keys = Object.keys(localStorage);
+		keys.splice(keys.findIndex((el) => {return el === "oldIds"}), 1);
     keys.forEach((el) => {
       item = JSON.parse(localStorage.getItem(el));
-      noteArray.push(new Note(item.id, item.content));
-    });
-    noteArray.forEach((el) => {
-      el.showNote();
-    })
-  }
+			noteArray.push(new Note(item.id, item.content));
+		});
+  	noteArray.forEach((el) => { el.showNote() })
+	}
 }
 
 // VARIABLES
